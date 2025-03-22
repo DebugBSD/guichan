@@ -61,11 +61,15 @@ FPSDemo::FPSDemo()
     // Init SDL
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    mScreen = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL);	
+    //mScreen = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL);	
+    if(SDL_CreateWindowAndRenderer(800, 600, SDL_WINDOW_OPENGL, &mWindow, &mRenderer) < 0)
+    {
+        // Throw an exception
+    }
 
-    SDL_EnableUNICODE(1);
-    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-    SDL_WM_SetCaption("Guichan FPS demo", NULL);
+    //SDL_EnableUNICODE(1);
+    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+    //SDL_WM_SetCaption("Guichan FPS demo", NULL);
 	
     // Init SDL_Mixer
     Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);
@@ -641,7 +645,7 @@ void FPSDemo::runIntro()
 		
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         mGui->draw();
-        SDL_GL_SwapBuffers();
+        SDL_GL_SwapWindow(mWindow);
         SDL_Delay(10);		
     }
 	
@@ -664,7 +668,7 @@ void FPSDemo::runMain()
         {
             // Clear the screen before remaking the Gui
             glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            SDL_GL_SwapBuffers();
+            SDL_GL_SwapWindow(mWindow);
 			
             cleanGui();
             initGui();		
@@ -697,7 +701,7 @@ void FPSDemo::runMain()
         mGui->draw();
         glPopMatrix();
 		
-        SDL_GL_SwapBuffers();
+        SDL_GL_SwapWindow(mWindow);
         SDL_Delay(10);		
     }
 }
@@ -805,13 +809,13 @@ void FPSDemo::initVideo()
     }
     if (mFullScreen->isSelected())
     {
-        mScreen = SDL_SetVideoMode(mWidth, mHeight, 32, SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL | SDL_FULLSCREEN);
+        //mScreen = SDL_SetVideoMode(mWidth, mHeight, 32, SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL | SDL_FULLSCREEN);
         mHaveFullscreen = true;
     }
     else
     {
         mHaveFullscreen = false;
-        mScreen = SDL_SetVideoMode(mWidth, mHeight, 32, SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL);
+        //mScreen = SDL_SetVideoMode(mWidth, mHeight, 32, SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL);
     }
     mOpenGLGraphics->setTargetPlane(mWidth, mHeight);
     initOpenGL();

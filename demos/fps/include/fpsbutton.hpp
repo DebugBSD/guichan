@@ -46,8 +46,8 @@
 
 #include <guichan.hpp>
 #include <string>
-#include <SDL/SDL.h>
-#include <SDL/SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 /*
  * The ordinary default button is quite ugly so we have made ourselves
