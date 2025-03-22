@@ -27,12 +27,12 @@ openglsdl:
 	-lguichan_sdl -lguichan_opengl -lguichan -lSDL_image `sdl-config --libs --cflags` -lGL
 
 sdl:
-	g++ sdlhelloworld.cpp -o sdlhelloworld $(CFLAGS) \
-	-lguichan_sdl -lguichan -lSDL_image `sdl-config --libs --cflags`
-	g++ sdlwidgets.cpp -o sdlwidgets $(CFLAGS) \
-	-lguichan_sdl -lguichan -lSDL_image `sdl-config --libs --cflags`
-	g++ sdlaction.cpp -o sdlaction $(CFLAGS) \
-	-lguichan_sdl -lguichan -lSDL_image `sdl-config --libs --cflags`
+	clang++ sdlhelloworld.cpp -o sdlhelloworld $(CFLAGS) \
+	-L/usr/local/lib -lguichan_sdl -lguichan -lSDL_image `sdl-config --libs --cflags`
+	clang++ sdlwidgets.cpp -o sdlwidgets $(CFLAGS) \
+	-L/usr/local/lib -lguichan_sdl -lguichan -lSDL_image `sdl-config --libs --cflags`
+	clang++ sdlaction.cpp -o sdlaction $(CFLAGS) \
+	-L/usr/local/lib -lguichan_sdl -lguichan -lSDL_image `sdl-config --libs --cflags`
 
 clean:
 	rm -f allegroaction allegrohelloworld allegrowidgets

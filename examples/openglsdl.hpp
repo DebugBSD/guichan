@@ -15,7 +15,8 @@
 namespace openglsdl
 {
     bool running = true;
-    SDL_Surface* screen;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
 
     // All back ends contain objects to make Guichan work on a
     // specific target. They are a Graphics object to make Guichan 
@@ -37,15 +38,13 @@ namespace openglsdl
         SDL_Init(SDL_INIT_VIDEO);
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-        screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL);
+        if(SDL_CreateWindowAndRenderer(640, 480, SDL_WINDOW_OPENGL, &window, &renderer) < 0)
+        {
+            // Look at error, see SDL_GetError()...
+        }
 
         glViewport(0, 0, 640, 480);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-        // We want unicode for the SDLInput object to function properly.
-        SDL_EnableUNICODE(1);
-        // We also want to enable key repeat.
-        SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
         // Now it's time to initialise the Guichan OpenGL back end
         // and the Guichan SDL back end.
@@ -107,7 +106,7 @@ namespace openglsdl
                         if (event.key.keysym.mod & KMOD_CTRL)
                         {
                             // Works with X11 only
-                            SDL_WM_ToggleFullScreen(screen);
+                            //SDL_WM_ToggleFullScreen(screen);
                         }
                     }
                 }
@@ -127,7 +126,7 @@ namespace openglsdl
             // Now we let the Gui object draw itself.
             globals::gui->draw();
             // Finally we update the screen.
-            SDL_GL_SwapBuffers();
+            SDL_GL_SwapWindow(window);
         }
     }
 }

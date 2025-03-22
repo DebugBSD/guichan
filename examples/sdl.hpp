@@ -9,7 +9,8 @@
 namespace sdl
 {
     bool running = true;
-    SDL_Surface* screen;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
 
     // All back ends contain objects to make Guichan work on a
     // specific target - in this case SDL - and they are a Graphics
@@ -29,11 +30,11 @@ namespace sdl
     {
         // We simply initialise SDL as we would do with any SDL application.
         SDL_Init(SDL_INIT_VIDEO);
-        screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE);
-        // We want unicode for the SDLInput object to function properly.
-        SDL_EnableUNICODE(1);
-        // We also want to enable key repeat.
-        SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+
+        if(SDL_CreateWindowAndRenderer(640, 480, 0, &window, &renderer) < 0)
+        {
+            // Look at error, see SDL_GetError()...
+        }
 
         // Now it's time to initialise the Guichan SDL back end.
 
@@ -44,7 +45,7 @@ namespace sdl
         graphics = new gcn::SDLGraphics();
         // The Graphics object needs a target to draw to, in this case it's the
         // screen surface, but any surface will do, it doesn't have to be the screen.
-        graphics->setTarget(screen);
+        graphics->setTarget(renderer, 640, 480);
         input = new gcn::SDLInput();
 
         // Now we create the Gui object to be used with this SDL application.
@@ -93,9 +94,12 @@ namespace sdl
                     {
                         if (event.key.keysym.mod & KMOD_CTRL)
                         {
-                            // Works with X11 only
-                            SDL_WM_ToggleFullScreen(screen);
+                            SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
                         }
+                    }
+                    if (event.key.keysym.sym == SDLK_r)
+                    {
+                        SDL_SetWindowFullscreen(window, 0);
                     }
                 }
                 else if(event.type == SDL_QUIT)
@@ -114,7 +118,8 @@ namespace sdl
             // Now we let the Gui object draw itself.
             globals::gui->draw();
             // Finally we update the screen.
-            SDL_Flip(screen);
+            //SDL_Flip(screen);
+            SDL_RenderPresent(renderer);
         }
     }
 }
